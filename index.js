@@ -588,6 +588,18 @@ function version(program, projectPath) {
 					/VERSION_NUMBER: (\d+)\.(\d+)\.(\d+)/,
 					"VERSION_NUMBER: " + appPkg.version
 				);
+				iosReleaseFile = iosReleaseFile.replace(
+					/BUILD_NUMBER: (\d+)/,
+					function (match, cg1) {
+						const newVersionCodeNumber = getNewVersionCode(
+							programOpts,
+							parseInt(cg1, 10),
+							appPkg.version
+						);
+
+						return "BUILD_NUMBER: " + newVersionCodeNumber;
+					}
+				);
 			} catch (error) {
 				console.error(error);
 			}
