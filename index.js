@@ -147,6 +147,33 @@ function version(program, projectPath) {
 	const targets = [].concat(programOpts.target, env.target).filter(Boolean);
 	var appPkg;
 
+	const workflowPaths = {
+		androidDebug: path.join(
+			projPath,
+			".github",
+			"workflows",
+			"assemble_android_debug.yml"
+		),
+		androidRelease: path.join(
+			projPath,
+			".github",
+			"workflows",
+			"assemble_android_release.yml"
+		),
+		iosDebug: path.join(
+			projPath,
+			".github",
+			"workflows",
+			"assemble_ios_debug.yml"
+		),
+		iosRelease: path.join(
+			projPath,
+			".github",
+			"workflows",
+			"assemble_ios_release.yml"
+		),
+	};
+
 	try {
 		resolveFrom(projPath, "react-native");
 		appPkg = require(path.join(projPath, "package.json"));
@@ -266,6 +293,57 @@ function version(program, projectPath) {
 			} else {
 				fs.writeFileSync(programOpts.android, gradleFile);
 			}
+
+			var androidDebugFile, androidReleaseFile;
+
+			try {
+				androidDebugFile = fs.readFileSync(workflowPaths.androidDebug, "utf8");
+				androidDebugFile = androidDebugFile.replace(
+					/VERSION_NAME: (\d+)\.(\d+)\.(\d+)/,
+					"VERSION_NAME: " + appPkg.version
+				);
+				androidDebugFile = androidDebugFile.replace(
+					/VERSION_CODE: (\d+)/,
+					function (match, cg1) {
+						const newVersionCodeNumber = getNewVersionCode(
+							programOpts,
+							parseInt(cg1, 10),
+							appPkg.version
+						);
+
+						return "VERSION_CODE: " + newVersionCodeNumber;
+					}
+				);
+			} catch (error) {
+				console.error(error);
+			}
+			fs.writeFileSync(workflowPaths.androidDebug, androidDebugFile);
+
+			try {
+				androidReleaseFile = fs.readFileSync(
+					workflowPaths.androidRelease,
+					"utf8"
+				);
+				androidReleaseFile = androidReleaseFile.replace(
+					/VERSION_NAME: (\d+)\.(\d+)\.(\d+)/,
+					"VERSION_NAME: " + appPkg.version
+				);
+				androidReleaseFile = androidReleaseFile.replace(
+					/VERSION_CODE: (\d+)/,
+					function (match, cg1) {
+						const newVersionCodeNumber = getNewVersionCode(
+							programOpts,
+							parseInt(cg1, 10),
+							appPkg.version
+						);
+
+						return "VERSION_CODE: " + newVersionCodeNumber;
+					}
+				);
+			} catch (error) {
+				console.error(error);
+			}
+			fs.writeFileSync(workflowPaths.androidRelease, androidReleaseFile);
 
 			log({ text: "Android updated" }, programOpts.quiet);
 			resolve();
@@ -490,6 +568,30 @@ function version(program, projectPath) {
 
 				xcode.save();
 			}
+
+			var iosDebugFile, iosReleaseFile;
+
+			try {
+				iosDebugFile = fs.readFileSync(workflowPaths.iosDebug, "utf8");
+				iosDebugFile = iosDebugFile.replace(
+					/VERSION_NUMBER: (\d+)\.(\d+)\.(\d+)/,
+					"VERSION_NUMBER: " + appPkg.version
+				);
+			} catch (error) {
+				console.error(error);
+			}
+			fs.writeFileSync(workflowPaths.iosDebug, iosDebugFile);
+
+			try {
+				iosReleaseFile = fs.readFileSync(workflowPaths.iosRelease, "utf8");
+				iosReleaseFile = iosReleaseFile.replace(
+					/VERSION_NUMBER: (\d+)\.(\d+)\.(\d+)/,
+					"VERSION_NUMBER: " + appPkg.version
+				);
+			} catch (error) {
+				console.error(error);
+			}
+			fs.writeFileSync(workflowPaths.iosRelease, iosReleaseFile);
 
 			log({ text: "iOS updated" }, programOpts.quiet);
 			resolve();

@@ -1,5 +1,5 @@
 {
-  "name": "react-native-version",
+  "name": "@lesliewong007/react-native-version",
   "description": "Version your React Native or Expo app in a `npm version` fashion.",
   "license": "MIT",
   "author": "Martin Stovicek",
@@ -11,7 +11,7 @@
   "bugs": {
     "url": "https://github.com/stovmascript/react-native-version/issues"
   },
-  "version": "4.0.0",
+  "version": "4.0.1",
   "main": "index.js",
   "bin": {
     "react-native-version": "cli.js"
