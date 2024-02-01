@@ -160,6 +160,42 @@ function version(program, projectPath) {
 			"workflows",
 			"assemble_android_release.yml"
 		),
+		androidDebugCn: path.join(
+			projPath,
+			".github",
+			"workflows",
+			"assemble_android_debug_cn.yml"
+		),
+		androidReleaseCn: path.join(
+			projPath,
+			".github",
+			"workflows",
+			"assemble_android_release_cn.yml"
+		),
+		androidDebugTracemoe: path.join(
+			projPath,
+			".github",
+			"workflows",
+			"assemble_android_debug_tracemoe.yml"
+		),
+		androidReleaseTracemoe: path.join(
+			projPath,
+			".github",
+			"workflows",
+			"assemble_android_release_tracemoe.yml"
+		),
+		androidDebugTracemoeCn: path.join(
+			projPath,
+			".github",
+			"workflows",
+			"assemble_android_debug_tracemoe_cn.yml"
+		),
+		androidReleaseTracemoeCn: path.join(
+			projPath,
+			".github",
+			"workflows",
+			"assemble_android_release_tracemoe_cn.yml"
+		),
 		iosDebug: path.join(
 			projPath,
 			".github",
@@ -171,6 +207,42 @@ function version(program, projectPath) {
 			".github",
 			"workflows",
 			"assemble_ios_release.yml"
+		),
+		iosDebugCn: path.join(
+			projPath,
+			".github",
+			"workflows",
+			"assemble_ios_debug_cn.yml"
+		),
+		iosReleaseCn: path.join(
+			projPath,
+			".github",
+			"workflows",
+			"assemble_ios_release_cn.yml"
+		),
+		iosDebugTracemoe: path.join(
+			projPath,
+			".github",
+			"workflows",
+			"assemble_ios_debug_tracemoe.yml"
+		),
+		iosReleaseTracemoe: path.join(
+			projPath,
+			".github",
+			"workflows",
+			"assemble_ios_release_tracemoe.yml"
+		),
+		iosDebugTracemoeCn: path.join(
+			projPath,
+			".github",
+			"workflows",
+			"assemble_ios_debug_tracemoe_cn.yml"
+		),
+		iosReleaseTracemoeCn: path.join(
+			projPath,
+			".github",
+			"workflows",
+			"assemble_ios_release_tracemoe_cn.yml"
 		),
 	};
 
@@ -294,7 +366,14 @@ function version(program, projectPath) {
 				fs.writeFileSync(programOpts.android, gradleFile);
 			}
 
-			var androidDebugFile, androidReleaseFile;
+			var androidDebugFile,
+				androidReleaseFile,
+				androidDebugCnFile,
+				androidReleaseCnFile,
+				androidDebugTracemoeFile,
+				androidReleaseTracemoeFile,
+				androidDebugTracemoeCnFile,
+				androidReleaseTracemoeCnFile;
 
 			try {
 				androidDebugFile = fs.readFileSync(workflowPaths.androidDebug, "utf8");
@@ -314,10 +393,10 @@ function version(program, projectPath) {
 						return "VERSION_CODE: " + newVersionCodeNumber;
 					}
 				);
+				fs.writeFileSync(workflowPaths.androidDebug, androidDebugFile);
 			} catch (error) {
 				console.error(error);
 			}
-			fs.writeFileSync(workflowPaths.androidDebug, androidDebugFile);
 
 			try {
 				androidReleaseFile = fs.readFileSync(
@@ -340,10 +419,178 @@ function version(program, projectPath) {
 						return "VERSION_CODE: " + newVersionCodeNumber;
 					}
 				);
+				fs.writeFileSync(workflowPaths.androidRelease, androidReleaseFile);
 			} catch (error) {
 				console.error(error);
 			}
-			fs.writeFileSync(workflowPaths.androidRelease, androidReleaseFile);
+
+			try {
+				androidDebugCnFile = fs.readFileSync(
+					workflowPaths.androidDebugCn,
+					"utf8"
+				);
+				androidDebugCnFile = androidDebugCnFile.replace(
+					/VERSION_NAME: (\d+)\.(\d+)\.(\d+)/,
+					"VERSION_NAME: " + appPkg.version
+				);
+				androidDebugCnFile = androidDebugCnFile.replace(
+					/VERSION_CODE: (\d+)/,
+					function (match, cg1) {
+						const newVersionCodeNumber = getNewVersionCode(
+							programOpts,
+							parseInt(cg1, 10),
+							appPkg.version
+						);
+
+						return "VERSION_CODE: " + newVersionCodeNumber;
+					}
+				);
+				fs.writeFileSync(workflowPaths.androidDebugCn, androidDebugCnFile);
+			} catch (error) {
+				console.error(error);
+			}
+
+			try {
+				androidReleaseCnFile = fs.readFileSync(
+					workflowPaths.androidReleaseCn,
+					"utf8"
+				);
+				androidReleaseCnFile = androidReleaseCnFile.replace(
+					/VERSION_NAME: (\d+)\.(\d+)\.(\d+)/,
+					"VERSION_NAME: " + appPkg.version
+				);
+				androidReleaseCnFile = androidReleaseCnFile.replace(
+					/VERSION_CODE: (\d+)/,
+					function (match, cg1) {
+						const newVersionCodeNumber = getNewVersionCode(
+							programOpts,
+							parseInt(cg1, 10),
+							appPkg.version
+						);
+
+						return "VERSION_CODE: " + newVersionCodeNumber;
+					}
+				);
+				fs.writeFileSync(workflowPaths.androidReleaseCn, androidReleaseCnFile);
+			} catch (error) {
+				console.error(error);
+			}
+
+			try {
+				androidDebugTracemoeFile = fs.readFileSync(
+					workflowPaths.androidDebugTracemoe,
+					"utf8"
+				);
+				androidDebugTracemoeFile = androidDebugTracemoeFile.replace(
+					/VERSION_NAME: (\d+)\.(\d+)\.(\d+)/,
+					"VERSION_NAME: " + appPkg.version
+				);
+				androidDebugTracemoeFile = androidDebugTracemoeFile.replace(
+					/VERSION_CODE: (\d+)/,
+					function (match, cg1) {
+						const newVersionCodeNumber = getNewVersionCode(
+							programOpts,
+							parseInt(cg1, 10),
+							appPkg.version
+						);
+
+						return "VERSION_CODE: " + newVersionCodeNumber;
+					}
+				);
+				fs.writeFileSync(
+					workflowPaths.androidDebugTracemoe,
+					androidDebugTracemoeFile
+				);
+			} catch (error) {
+				console.error(error);
+			}
+
+			try {
+				androidReleaseTracemoeFile = fs.readFileSync(
+					workflowPaths.androidReleaseTracemoe,
+					"utf8"
+				);
+				androidReleaseTracemoeFile = androidReleaseTracemoeFile.replace(
+					/VERSION_NAME: (\d+)\.(\d+)\.(\d+)/,
+					"VERSION_NAME: " + appPkg.version
+				);
+				androidReleaseTracemoeFile = androidReleaseTracemoeFile.replace(
+					/VERSION_CODE: (\d+)/,
+					function (match, cg1) {
+						const newVersionCodeNumber = getNewVersionCode(
+							programOpts,
+							parseInt(cg1, 10),
+							appPkg.version
+						);
+
+						return "VERSION_CODE: " + newVersionCodeNumber;
+					}
+				);
+				fs.writeFileSync(
+					workflowPaths.androidReleaseTracemoe,
+					androidReleaseTracemoeFile
+				);
+			} catch (error) {
+				console.error(error);
+			}
+
+			try {
+				androidDebugTracemoeCnFile = fs.readFileSync(
+					workflowPaths.androidDebugTracemoeCn,
+					"utf8"
+				);
+				androidDebugTracemoeCnFile = androidDebugTracemoeCnFile.replace(
+					/VERSION_NAME: (\d+)\.(\d+)\.(\d+)/,
+					"VERSION_NAME: " + appPkg.version
+				);
+				androidDebugTracemoeCnFile = androidDebugTracemoeCnFile.replace(
+					/VERSION_CODE: (\d+)/,
+					function (match, cg1) {
+						const newVersionCodeNumber = getNewVersionCode(
+							programOpts,
+							parseInt(cg1, 10),
+							appPkg.version
+						);
+
+						return "VERSION_CODE: " + newVersionCodeNumber;
+					}
+				);
+				fs.writeFileSync(
+					workflowPaths.androidDebugTracemoeCn,
+					androidDebugTracemoeCnFile
+				);
+			} catch (error) {
+				console.error(error);
+			}
+
+			try {
+				androidReleaseTracemoeCnFile = fs.readFileSync(
+					workflowPaths.androidReleaseTracemoeCn,
+					"utf8"
+				);
+				androidReleaseTracemoeCnFile = androidReleaseTracemoeCnFile.replace(
+					/VERSION_NAME: (\d+)\.(\d+)\.(\d+)/,
+					"VERSION_NAME: " + appPkg.version
+				);
+				androidReleaseTracemoeCnFile = androidReleaseTracemoeCnFile.replace(
+					/VERSION_CODE: (\d+)/,
+					function (match, cg1) {
+						const newVersionCodeNumber = getNewVersionCode(
+							programOpts,
+							parseInt(cg1, 10),
+							appPkg.version
+						);
+
+						return "VERSION_CODE: " + newVersionCodeNumber;
+					}
+				);
+				fs.writeFileSync(
+					workflowPaths.androidReleaseTracemoeCn,
+					androidReleaseTracemoeCnFile
+				);
+			} catch (error) {
+				console.error(error);
+			}
 
 			log({ text: "Android updated" }, programOpts.quiet);
 			resolve();
@@ -569,7 +816,14 @@ function version(program, projectPath) {
 				xcode.save();
 			}
 
-			var iosDebugFile, iosReleaseFile;
+			var iosDebugFile,
+				iosReleaseFile,
+				iosDebugCnFile,
+				iosReleaseCnFile,
+				iosDebugTracemoeFile,
+				iosReleaseTracemoeFile,
+				iosDebugTracemoeCnFile,
+				iosReleaseTracemoeCnFile;
 
 			try {
 				iosDebugFile = fs.readFileSync(workflowPaths.iosDebug, "utf8");
@@ -577,10 +831,22 @@ function version(program, projectPath) {
 					/VERSION_NUMBER: (\d+)\.(\d+)\.(\d+)/,
 					"VERSION_NUMBER: " + appPkg.version
 				);
+				iosDebugFile = iosDebugFile.replace(
+					/BUILD_NUMBER: (\d+)/,
+					function (match, cg1) {
+						const newVersionCodeNumber = getNewVersionCode(
+							programOpts,
+							parseInt(cg1, 10),
+							appPkg.version
+						);
+
+						return "BUILD_NUMBER: " + newVersionCodeNumber;
+					}
+				);
+				fs.writeFileSync(workflowPaths.iosDebug, iosDebugFile);
 			} catch (error) {
 				console.error(error);
 			}
-			fs.writeFileSync(workflowPaths.iosDebug, iosDebugFile);
 
 			try {
 				iosReleaseFile = fs.readFileSync(workflowPaths.iosRelease, "utf8");
@@ -600,10 +866,169 @@ function version(program, projectPath) {
 						return "BUILD_NUMBER: " + newVersionCodeNumber;
 					}
 				);
+				fs.writeFileSync(workflowPaths.iosRelease, iosReleaseFile);
 			} catch (error) {
 				console.error(error);
 			}
-			fs.writeFileSync(workflowPaths.iosRelease, iosReleaseFile);
+
+			try {
+				iosDebugCnFile = fs.readFileSync(workflowPaths.iosDebugCn, "utf8");
+				iosDebugCnFile = iosDebugCnFile.replace(
+					/VERSION_NUMBER: (\d+)\.(\d+)\.(\d+)/,
+					"VERSION_NUMBER: " + appPkg.version
+				);
+				iosDebugCnFile = iosDebugCnFile.replace(
+					/BUILD_NUMBER: (\d+)/,
+					function (match, cg1) {
+						const newVersionCodeNumber = getNewVersionCode(
+							programOpts,
+							parseInt(cg1, 10),
+							appPkg.version
+						);
+
+						return "BUILD_NUMBER: " + newVersionCodeNumber;
+					}
+				);
+				fs.writeFileSync(workflowPaths.iosDebugCn, iosDebugCnFile);
+			} catch (error) {
+				console.error(error);
+			}
+
+			try {
+				iosReleaseCnFile = fs.readFileSync(workflowPaths.iosReleaseCn, "utf8");
+				iosReleaseCnFile = iosReleaseCnFile.replace(
+					/VERSION_NUMBER: (\d+)\.(\d+)\.(\d+)/,
+					"VERSION_NUMBER: " + appPkg.version
+				);
+				iosReleaseCnFile = iosReleaseCnFile.replace(
+					/BUILD_NUMBER: (\d+)/,
+					function (match, cg1) {
+						const newVersionCodeNumber = getNewVersionCode(
+							programOpts,
+							parseInt(cg1, 10),
+							appPkg.version
+						);
+
+						return "BUILD_NUMBER: " + newVersionCodeNumber;
+					}
+				);
+				fs.writeFileSync(workflowPaths.iosReleaseCn, iosReleaseCnFile);
+			} catch (error) {
+				console.error(error);
+			}
+
+			try {
+				iosDebugTracemoeFile = fs.readFileSync(
+					workflowPaths.iosDebugTracemoe,
+					"utf8"
+				);
+				iosDebugTracemoeFile = iosDebugTracemoeFile.replace(
+					/VERSION_NUMBER: (\d+)\.(\d+)\.(\d+)/,
+					"VERSION_NUMBER: " + appPkg.version
+				);
+				iosDebugTracemoeFile = iosDebugTracemoeFile.replace(
+					/BUILD_NUMBER: (\d+)/,
+					function (match, cg1) {
+						const newVersionCodeNumber = getNewVersionCode(
+							programOpts,
+							parseInt(cg1, 10),
+							appPkg.version
+						);
+
+						return "BUILD_NUMBER: " + newVersionCodeNumber;
+					}
+				);
+				fs.writeFileSync(workflowPaths.iosDebugTracemoe, iosDebugTracemoeFile);
+			} catch (error) {
+				console.error(error);
+			}
+
+			try {
+				iosReleaseTracemoeFile = fs.readFileSync(
+					workflowPaths.iosReleaseTracemoe,
+					"utf8"
+				);
+				iosReleaseTracemoeFile = iosReleaseTracemoeFile.replace(
+					/VERSION_NUMBER: (\d+)\.(\d+)\.(\d+)/,
+					"VERSION_NUMBER: " + appPkg.version
+				);
+				iosReleaseTracemoeFile = iosReleaseTracemoeFile.replace(
+					/BUILD_NUMBER: (\d+)/,
+					function (match, cg1) {
+						const newVersionCodeNumber = getNewVersionCode(
+							programOpts,
+							parseInt(cg1, 10),
+							appPkg.version
+						);
+
+						return "BUILD_NUMBER: " + newVersionCodeNumber;
+					}
+				);
+				fs.writeFileSync(
+					workflowPaths.iosReleaseTracemoe,
+					iosReleaseTracemoeFile
+				);
+			} catch (error) {
+				console.error(error);
+			}
+
+			try {
+				iosDebugTracemoeCnFile = fs.readFileSync(
+					workflowPaths.iosDebugTracemoeCn,
+					"utf8"
+				);
+				iosDebugTracemoeCnFile = iosDebugTracemoeCnFile.replace(
+					/VERSION_NUMBER: (\d+)\.(\d+)\.(\d+)/,
+					"VERSION_NUMBER: " + appPkg.version
+				);
+				iosDebugTracemoeCnFile = iosDebugTracemoeCnFile.replace(
+					/BUILD_NUMBER: (\d+)/,
+					function (match, cg1) {
+						const newVersionCodeNumber = getNewVersionCode(
+							programOpts,
+							parseInt(cg1, 10),
+							appPkg.version
+						);
+
+						return "BUILD_NUMBER: " + newVersionCodeNumber;
+					}
+				);
+				fs.writeFileSync(
+					workflowPaths.iosDebugTracemoeCn,
+					iosDebugTracemoeCnFile
+				);
+			} catch (error) {
+				console.error(error);
+			}
+
+			try {
+				iosReleaseTracemoeCnFile = fs.readFileSync(
+					workflowPaths.iosReleaseTracemoeCn,
+					"utf8"
+				);
+				iosReleaseTracemoeCnFile = iosReleaseTracemoeCnFile.replace(
+					/VERSION_NUMBER: (\d+)\.(\d+)\.(\d+)/,
+					"VERSION_NUMBER: " + appPkg.version
+				);
+				iosReleaseTracemoeCnFile = iosReleaseTracemoeCnFile.replace(
+					/BUILD_NUMBER: (\d+)/,
+					function (match, cg1) {
+						const newVersionCodeNumber = getNewVersionCode(
+							programOpts,
+							parseInt(cg1, 10),
+							appPkg.version
+						);
+
+						return "BUILD_NUMBER: " + newVersionCodeNumber;
+					}
+				);
+				fs.writeFileSync(
+					workflowPaths.iosReleaseTracemoeCn,
+					iosReleaseTracemoeCnFile
+				);
+			} catch (error) {
+				console.error(error);
+			}
 
 			log({ text: "iOS updated" }, programOpts.quiet);
 			resolve();
